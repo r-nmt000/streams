@@ -3,7 +3,8 @@ import streams from "../apis/streams";
 
 export const signIn = (userId)  => {
     return {
-        type: SIGN_IN
+        type: SIGN_IN,
+        payload: userId
     };
 };
 export const signOut = ()  => {
@@ -13,8 +14,10 @@ export const signOut = ()  => {
 };
 
 export const createStream = (formValues) => {
-    return async (dispatch) => {
-        const response = await streams.post('/streams', formValues);
+    return async (dispatch, getState) => {
+        const { userId } = getState().auth;
+        console.log(userId);
+        const response = await streams.post('/streams', { ...formValues, userId });
         dispatch({ type: CREATE_STREAM, payload: response.data});
     }
 };
